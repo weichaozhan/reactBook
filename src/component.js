@@ -14,3 +14,18 @@ class Component {
         return this.el
     }
 }
+
+const createDOMFromString = (domString) => {
+    const div = document.createElement('div')
+
+    div.innerHTML = domString
+    return div
+}
+
+const mount = (component, wrapper) => {
+    wrapper.appendChild(component._renderDOM())
+    component.onChangeState = (el, oldEl) => {
+        wrapper.insertBefore(el, oldEl)
+        wrapper.removeChild(oldEl)
+    }
+}

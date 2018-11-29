@@ -1,54 +1,63 @@
-class LikeButton {
-    constructor() {
+class Component {
+    constructor(props = {}) {
+        this.props = props
+    }
+    setState(state) {
+        const oldEl = this.el
+        this.state = state
+        this._renderDOM()
+        if (this.onChangeState) this.onChangeState(this.el, oldEl)
+    }
+
+    _renderDOM() {
+        this.el = createDOMFromString(this.render())
+        if (this.onClick) {
+            this.el.addEventListener('click', this.onClick.bind(this))
+        }
+        return this.el
+    }
+}
+
+const createDOMFromString = (domString) => {
+    const div = document.createElement('span')
+
+    div.innerHTML = domString
+    return div
+}
+
+const mount = (component, wrapper) => {
+    wrapper.appendChild(component._renderDOM())
+    component.onChangeState = (el, oldEl) => {
+        wrapper.insertBefore(el, oldEl)
+        wrapper.removeChild(oldEl)
+    }
+}
+
+class LikeButton extends Component {
+    constructor(props) {
+        super(props)
         this.state = {
             isLiked: false,
         }
-
-        this.changeLikeText = this.changeLikeText.bind(this)
     }
 
-    setState(state) {
-        const oldEl = this.el
-
-        this.state = state
-        this.el = this.render()
-        if (this.onStateChange) {
-            this.onStateChange(this.el, oldEl)
-        }
-    }
-
-    changeLikeText() {
+    onClick() {
         this.setState({
             isLiked: !this.state.isLiked
         })
     }
 
     render() {
-        this.el = createDOMFromString(`
+        return `
         <button class="like-btn">
             <span class="like-text">${this.state.isLiked ? '取消' : '点赞'}</span>
             <span>👍</span>
         </button>
-        `)
-
-        this.el.addEventListener('click', this.changeLikeText)
-
-        return this.el
+        `
     }
 }
 
-const createDOMFromString = (domString) => {
-    const div = document.createElement('div')
-
-    div.innerHTML = domString
-    return div
-}
-
 const wrapper = document.querySelector('.wrapper')
-const likeButton = new LikeButton()
 
-likeButton.onStateChange = (el, oldEl) => {
-    wrapper.insertBefore(el, oldEl)
-    wrapper.removeChild(oldEl)
-}
-wrapper.appendChild(likeButton.render())
+mount(new LikeButton(), wrapper)
+mount(new LikeButton(), wrapper)
