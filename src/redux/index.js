@@ -1,4 +1,29 @@
-const appState = {
+function renderTitle(newTitle, oldTitle = {}) {
+  if (newTitle === oldTitle) return;
+
+  const titleDom = document.querySelector('#title');
+  
+  titleDom.innerHTML = newTitle.text;
+  titleDom.style.color = newTitle.color;
+}
+
+function renderContent(newContent, oldContent = {}) {
+  if (newContent === oldContent) return;
+  
+  const contentDom = document.querySelector('#content');
+
+  contentDom.innerHTML = newContent.text;
+  contentDom.style.color = newContent.color;
+}
+
+function renderApp(newAppState, oldAppState = {}) {
+  if (newAppState === oldAppState) return;
+
+  renderTitle(newAppState.title, oldAppState.title);
+  renderContent(newAppState.content, oldAppState.content);
+}
+
+function stateChanger(state = {
   title: {
     text: 'title',
     color: 'skyblue'
@@ -7,48 +32,41 @@ const appState = {
     text: 'content',
     color: 'gray'
   }
-};
-
-function renderTitle(title) {
-  const titleDom = document.querySelector('#title');
-  
-  titleDom.innerHTML = title.text;
-  titleDom.style.color = title.color;
-}
-
-function renderContent(content) {
-  const contentDom = document.querySelector('#content');
-
-  contentDom.innerHTML = content.text;
-  contentDom.style.color = content.color;
-}
-
-function renderApp(appState) {
-  renderTitle(appState.title);
-  renderContent(appState.content);
-}
-
-function stateChanger(state, action) {
+}, action) {
   switch(action.type) {
     case 'UPDATE_TITLE_TEXT':
-      state.title.text = action.text;
-      break;
+      return {
+        ...state,
+        title: {
+          ...state.title,
+          text: action.text
+        }
+      };
     case 'UPDATE_TITLE_COLOR':
-      state.title.color = action.color;
-      break;
+      return {
+        ...state,
+        title: {
+          ...state.title,
+          color: action.color
+        }
+      };
     default:
-      break;
+      return state;
   }
 }
 
-function createStore(state, stateChanger) {
+function createStore(reducer) {
+  let state = undefined;
   const listeners = [];
   const subscribe = listener => listeners.push(listener);
   const getState = () => state;
   const dispatch = action => {
-    stateChanger(state, action);
+    state = reducer(state, action);
     listeners.forEach(listener => listener());
   };
+
+  dispatch({});
+
   return {
     getState,
     dispatch,
@@ -56,11 +74,17 @@ function createStore(state, stateChanger) {
   };
 }
 
-const store = createStore(appState, stateChanger);
+const store = createStore(stateChanger);
+let oldState = store.getState();
 
-renderApp(store.getState());
+renderApp(oldState);
 
-store.subscribe(() => renderApp(store.getState()));
+store.subscribe(() => {
+  const newState = store.getState();
+  renderApp(newState);
+  oldState = newState;
+});
+
 setTimeout(() => {
   store.dispatch({ type: 'UPDATE_TITLE_TEXT', text: '修改后的 title' });
   store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'red' });
