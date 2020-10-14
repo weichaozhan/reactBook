@@ -18,7 +18,7 @@ module.exports = {
       // { test: /\.(png|svg|jpg|gif)$/, use: ['url-loader?limit=1024&name=assets/images/[name].[ext]'] },
       { test: /\.(woff|woff2|eot|ttf|otf)$/, use: ['file-loader'] },
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         include: path.resolve(__dirname, 'src'),
         use: [

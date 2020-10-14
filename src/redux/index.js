@@ -87,5 +87,8 @@ store.subscribe(() => {
 
 setTimeout(() => {
   store.dispatch({ type: 'UPDATE_TITLE_TEXT', text: '修改后的 title' });
-  store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'red' });
+  
+  setTimeout(() => {
+    store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'red' });
+  }, 1000);
 }, 1000);
