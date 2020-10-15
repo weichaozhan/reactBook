@@ -55,7 +55,7 @@ function stateChanger(state = {
   }
 }
 
-function createStore(reducer) {
+export function createStore(reducer) {
   let state = undefined;
   const listeners = [];
   const subscribe = listener => listeners.push(listener);

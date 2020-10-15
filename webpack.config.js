@@ -10,6 +10,9 @@ module.exports = {
     port: 8000
   },
   devtool: 'inline-source-map',
+  resolve: {
+		extensions: ['.js', '.jsx', '.json']
+	},
   module: {
     rules: [
       {
@@ -44,7 +47,22 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: [
+          'style-loader',
+          { 
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[local]--[hash:base64:5]',
+            },
+          },
+          {
+            loader: 'less-loader',
+            options: {
+              javascriptEnabled: true,
+            }
+          }
+        ]
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf|mp3)$/,

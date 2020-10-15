@@ -1,9 +1,4 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import './like';
+import './redux/index';
 
-import './like.js';
-import './redux/index.js';
-
-ReactDOM.render(<div>
-  test
-</div>, document.querySelector('#app'));
+import './react/Index';

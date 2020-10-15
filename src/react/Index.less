@@ -1,0 +1,45 @@
+@antBlue: #1890ff;
+@red: red;
+
+.wrapper {
+  margin: 10px;
+  padding: 20px 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 2px;
+
+  & * {
+    box-sizing: border-box;
+  }
+  button {
+    width: 70px;
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: transparent;
+    border: 1px solid @antBlue;
+    border-radius: 2px;
+    transition: all .3s;
+    outline: none;
+    &:hover {
+      cursor: pointer;
+    }
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+    &.red-btn {
+      color: @red;
+      border: 1px solid @red;
+      &:hover {
+        color: #fff;
+        background-color: @red;
+      }
+    }
+    &.blue-btn {
+      color: @antBlue;
+      &:hover {
+        color: #fff;
+        background-color: @antBlue;
+      }
+    }
+  }
+}
