@@ -7,7 +7,7 @@ import ThemeSwitch from './ThemeSwitch';
 class Content extends Component {  
   render() {
     return <div>
-      <p style={{ color: this.props.themeColor }} >
+      <p style={{ color: this.props.themeColor, transition: 'all .3s' }} >
         I am content.
       </p>
 
